@@ -1,13 +1,12 @@
 import streamlit as st
 import pandas as pd
 import pickle
-import joblib
 
-# ---------------- Load trained model & scaler ----------------
+# ---------------- Load trained model ----------------
 with open("crop_model.pkl", "rb") as f:
     model = pickle.load(f)
 
-# prediction = model.predict(data)
+# ---------------- App Title ----------------
 st.title("🌱 AI Crop Recommendation System")
 st.write("Enter your soil and environmental conditions to get crop recommendations.")
 
@@ -43,9 +42,11 @@ input_data = pd.DataFrame([{
 
 # ---------------- Predict ----------------
 if st.button("Recommended Crop"):
-    prediction = model.predict(input_scaled)[0]
-    st.success(f"🌾 Recommended Crop: **{prediction}**")
-
+    try:
+        prediction = model.predict(input_data)[0]  # direct prediction
+        st.success(f"🌾 Recommended Crop: **{prediction}**")
+    except Exception as e:
+        st.error(f"❌ Prediction failed: {e}")
 
 # import streamlit as st
 # import pandas as pd
