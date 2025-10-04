@@ -48,8 +48,10 @@ input_scaled = scaler.transform(input_data[features])
 
 # ---------------- Prediction ----------------
 if st.button("Recommended Crop"):
+    # Use scaled and ordered input
     prediction = model.predict(input_scaled)[0]
     st.success(f"🌾 Recommended Crop: **{prediction}**")
+
 
 # import streamlit as st
 # import pandas as pd
