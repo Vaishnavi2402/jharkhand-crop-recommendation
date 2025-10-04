@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import pandas as pd
 import pickle
@@ -9,8 +7,7 @@ import joblib
 with open("crop_model.pkl", "rb") as f:
     model = pickle.load(f)
 
-scaler = joblib.load("scaler.pkl")  # make sure you have scaler.pkl from preprocessing
-
+prediction = model.predict(data)
 st.title("🌱 AI Crop Recommendation System")
 st.write("Enter your soil and environmental conditions to get crop recommendations.")
 
