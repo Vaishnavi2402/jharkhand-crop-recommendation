@@ -40,7 +40,8 @@ input_data = pd.DataFrame([{
     "Humidity_%": humidity,
     "Irrigation_enc": 1 if irrigation == "Yes" else 0,
     "Season_enc": {"Kharif": 0, "Rabi": 1, "Zaid": 2}[season],
-    "Landholding_ha": landholding
+    "Landholding_ha": landholding,
+    "Soil_Fertility": nitrogen + phosphorus + potassium
 }])
 
 # ---------------- Prediction ----------------
