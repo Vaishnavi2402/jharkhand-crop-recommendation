@@ -7,7 +7,7 @@ import joblib
 with open("crop_model.pkl", "rb") as f:
     model = pickle.load(f)
 
-prediction = model.predict(data)
+# prediction = model.predict(data)
 st.title("🌱 AI Crop Recommendation System")
 st.write("Enter your soil and environmental conditions to get crop recommendations.")
 
