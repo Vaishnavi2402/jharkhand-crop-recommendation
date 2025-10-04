@@ -44,10 +44,11 @@ input_data = pd.DataFrame([{
     "Soil_Fertility": nitrogen + phosphorus + potassium
 }])
 import joblib
-scaler = joblib.load("crop_model.pkl")
+scaler = joblib.load("scalar.pkl")
 input_scaled = scaler.transform(input_data)
 
 # ---------------- Prediction ----------------
 if st.button("Recommended Crop"):
-    prediction = model.predict(input_data)[0]
+    # prediction = model.predict(input_data)[0]
+    prediction = model.predict(input_scaled)[0]
     st.success(f"🌾Recommended Crop: **{prediction}**")
