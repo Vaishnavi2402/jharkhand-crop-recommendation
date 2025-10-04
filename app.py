@@ -14,9 +14,6 @@ st.markdown(
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
-    .sttitle{
-        color: #ffffff;
-    }
     /* Optional: make input boxes and buttons stand out */
     .stTextInput, .stNumberInput, .stSelectbox, .stButton {
         background-color: rgba(255, 255, 255, 0.8);
