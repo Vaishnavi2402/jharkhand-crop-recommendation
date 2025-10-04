@@ -8,6 +8,10 @@ with open("crop_model.pkl", "rb") as f:
 st.markdown(
     """
     <style>
+     .stTitle {
+        color: #ffffff;  /* white title */
+        text-shadow: 2px 2px 4px #000000;  /* slight shadow for readability */
+    }
     .stApp {
         background-image: url("https://media.istockphoto.com/id/478697531/photo/green-field-background.jpg?s=612x612&w=0&k=20&c=YsuXHd-tBixD_E-iEoIV7iJ80v0xCwzfUCZx88ONVo8=");
         background-size: cover;
@@ -21,11 +25,6 @@ st.markdown(
         border-radius: 8px;
         padding: 0.5rem;
     }
-     .stTitle {
-        color: #ffffff;  /* white title */
-        text-shadow: 2px 2px 4px #000000;  /* slight shadow for readability */
-    }
-
     .stButton>button {
         background-color: #4CAF50;
         color: white;
