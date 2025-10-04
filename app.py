@@ -41,9 +41,6 @@ input_data = pd.DataFrame([{
     "Soil_Fertility": nitrogen + phosphorus + potassium  # derived feature
 }])
 
-# ---------------- Scale input ----------------
-input_scaled = scaler.transform(input_data)
-
 # ---------------- Predict ----------------
 if st.button("Recommended Crop"):
     prediction = model.predict(input_scaled)[0]
