@@ -1,73 +1,49 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import joblib
-import numpy as np
-import json
+import streamlit as st
+import pandas as pd
+import pickle
 
-app = Flask(__name__)
-CORS(app)
+# Load your trained model (replace with your model filename)
+with open("model.pkl", "rb") as f:
+    model = pickle.load(f)
 
-# Load artifacts
-model = joblib.load('/content/crop_model_rf.pkl')
-scaler = joblib.load('/content/scaler.pkl')
-le_irrig = joblib.load('/content/le_irrig.pkl')
-le_season = joblib.load('/content/le_season.pkl')
-with open('/content/feature_cols.json','r') as f:
-    feature_cols = json.load(f)
+st.title("🌱 Smart Crop Recommendation System")
 
-@app.route('/')
-def home():
-    return "Crop Recommendation API - Colab Test"
+st.write("Enter your soil and environmental conditions to get crop recommendations.")
 
-def prepare_input(data_json):
-    # expect JSON keys matching subset of features, fallback to reasonable defaults if missing
-    # Order must match feature_cols used in training
-    vals = []
-    # read raw numeric inputs; if missing use average or safe default
-    for c in feature_cols:
-        if c in data_json:
-            vals.append(data_json[c])
-        else:
-            # simple fallback: zeros/mean-like defaults (you can refine)
-            if 'Soil' in c or 'Rainfall' in c or 'Temperature' in c or 'Humidity' in c or 'Landholding' in c:
-                vals.append(0)
-            else:
-                vals.append(0)
-    return np.array(vals, dtype=float).reshape(1, -1)
+# ---------------- Inputs ----------------
+ph = st.number_input("Soil pH", min_value=0.0, max_value=14.0, step=0.1)
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    data = request.json
-    # map irrigation & season if present as strings
-    if 'Irrigation' in data:
-        try:
-            data['Irrigation_enc'] = int(le_irrig.transform([data['Irrigation']])[0])
-        except:
-            return jsonify({"error":"Irrigation value not recognised. Options: "+str(list(le_irrig.classes_))}), 400
-    if 'Season' in data:
-        try:
-            data['Season_enc'] = int(le_season.transform([data['Season']])[0])
-        except:
-            return jsonify({"error":"Season value not recognised. Options: "+str(list(le_season.classes_))}), 400
+nitrogen = st.number_input("Nitrogen content (kg/ha)", min_value=0.0, max_value=200.0, step=1.0)
+phosphorus = st.number_input("Phosphorus content (kg/ha)", min_value=0.0, max_value=200.0, step=1.0)
+potassium = st.number_input("Potassium content (kg/ha)", min_value=0.0, max_value=200.0, step=1.0)
 
-    # feature engineering same as training
-    if 'Soil_Fertility' not in data:
-        data['Soil_Fertility'] = data.get('Nitrogen_N',0) + data.get('Phosphorus_P',0) + data.get('Potassium_K',0)
+organic_carbon = st.number_input("Organic Carbon (%)", min_value=0.0, max_value=10.0, step=0.1)
 
-    # Prepare vector in same order as feature_cols
-    x = []
-    for c in feature_cols:
-        x.append(float(data.get(c, 0)))
-    x = np.array(x).reshape(1,-1)
-    x_scaled = scaler.transform(x)
+rainfall = st.number_input("Rainfall (mm)", min_value=0.0, max_value=5000.0, step=1.0)
+temperature = st.number_input("Temperature (°C)", min_value=-10.0, max_value=50.0, step=0.1)
+humidity = st.number_input("Humidity (%)", min_value=0.0, max_value=100.0, step=1.0)
 
-    # get top 3
-    probs = model.predict_proba(x_scaled)[0]
-    classes = model.classes_
-    top_idx = np.argsort(probs)[::-1][:3]
-    recommendations = [{"Crop": classes[i], "Probability": float(round(probs[i],3))} for i in top_idx]
+irrigation = st.selectbox("Irrigation Available?", ["Yes", "No"])
+season = st.selectbox("Season", ["Kharif", "Rabi", "Zaid"])
 
-    return jsonify({"recommendations": recommendations})
+landholding = st.number_input("Landholding size (ha)", min_value=0.0, max_value=100.0, step=0.1)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+# ---------------- Data Preparation ----------------
+input_data = pd.DataFrame([{
+    "Soil_pH": ph,
+    "Nitrogen_N": nitrogen,
+    "Phosphorus_P": phosphorus,
+    "Potassium_K": potassium,
+    "Organic_Carbon": organic_carbon,
+    "Rainfall_mm": rainfall,
+    "Temperature_C": temperature,
+    "Humidity_%": humidity,
+    "Irrigation_enc": 1 if irrigation == "Yes" else 0,
+    "Season_enc": {"Kharif": 0, "Rabi": 1, "Zaid": 2}[season],
+    "Landholding_ha": landholding
+}])
+
+# ---------------- Prediction ----------------
+if st.button("Predict Crop"):
+    prediction = model.predict(input_data)[0]
+    st.success(f"🌾 Recommended Crop: **{prediction}**") app.py
