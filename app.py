@@ -44,7 +44,7 @@ input_data = pd.DataFrame([{
     "Soil_Fertility": nitrogen + phosphorus + potassium
 }])
 import joblib
-scaler = joblib.load("scaler.pkl")
+scaler = joblib.load("crop_model.pkl")
 input_scaled = scaler.transform(input_data)
 
 # ---------------- Prediction ----------------
