@@ -5,6 +5,31 @@ import pickle
 # ---------------- Load trained model ----------------
 with open("crop_model.pkl", "rb") as f:
     model = pickle.load(f)
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url("https://images.unsplash.com/photo-1580910051077-4690f0907c14?auto=format&fit=crop&w=1470&q=80");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    /* Optional: make input boxes and buttons stand out */
+    .stTextInput, .stNumberInput, .stSelectbox, .stButton {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
+        padding: 0.5rem;
+    }
+
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # ---------------- App Title ----------------
 st.title("🌱 AI Crop Recommendation System")
