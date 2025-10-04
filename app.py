@@ -21,6 +21,10 @@ st.markdown(
         border-radius: 8px;
         padding: 0.5rem;
     }
+     .stTitle {
+        color: #ffffff;  /* white title */
+        text-shadow: 2px 2px 4px #000000;  /* slight shadow for readability */
+    }
 
     .stButton>button {
         background-color: #4CAF50;
