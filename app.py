@@ -43,6 +43,9 @@ input_data = pd.DataFrame([{
     "Landholding_ha": landholding,
     "Soil_Fertility": nitrogen + phosphorus + potassium
 }])
+import joblib
+scaler = joblib.load("scaler.pkl")
+input_scaled = scaler.transform(input_data)
 
 # ---------------- Prediction ----------------
 if st.button("Recommended Crop"):
