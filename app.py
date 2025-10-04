@@ -39,13 +39,18 @@ input_data = pd.DataFrame([{
     "Landholding_ha": landholding
 }])
 
-# ---------------- Scale ----------------
-input_scaled = scaler.transform(input_data)
+# ---------------- Ensure same feature order ----------------
+features = ["Soil_pH","Nitrogen_N","Phosphorus_P","Potassium_K",
+            "Organic_Carbon","Rainfall_mm","Temperature_C","Humidity_%",
+            "Irrigation_enc","Season_enc","Landholding_ha"]
+
+input_scaled = scaler.transform(input_data[features])
 
 # ---------------- Prediction ----------------
 if st.button("Recommended Crop"):
     prediction = model.predict(input_scaled)[0]
     st.success(f"🌾 Recommended Crop: **{prediction}**")
+
 # import streamlit as st
 # import pandas as pd
 # import pickle
