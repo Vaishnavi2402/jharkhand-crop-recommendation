@@ -47,4 +47,3 @@ input_data = pd.DataFrame([{
 if st.button("Predict Crop"):
     prediction = model.predict(input_data)[0]
     st.success(f"🌾 Recommended Crop: **{prediction}**")
-
