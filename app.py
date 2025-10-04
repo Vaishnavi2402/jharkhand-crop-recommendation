@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 
 # Load your trained model (replace with your model filename)
-with open("model.pkl", "rb") as f:
+with open("crop_model.pkl", "rb") as f:
     model = pickle.load(f)
 
 st.title("🌱 Smart Crop Recommendation System")
